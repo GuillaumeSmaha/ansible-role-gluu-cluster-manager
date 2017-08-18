@@ -1,0 +1,9 @@
+
+gluu_ip: "{{ lookup('dig', '{{ ansible_ssh_host }}.')}}"
+
+gluu_cluster_mysql_user_password: "{{ lookup('pipe', \"cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1\") }}"
+
+gluu_cluster_app_mode: prod
+
+gluu_cluster_app_secret: "{{ lookup('pipe', \"cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1\") }}"
+

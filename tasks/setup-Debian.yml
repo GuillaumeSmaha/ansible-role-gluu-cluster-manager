@@ -1,0 +1,25 @@
+---
+- name: Install apt key for Gluu repository
+  apt_key:
+    url: "{{ __gluu_repository_gpg_key[ansible_distribution_release] }}"
+
+- name: Add Gluu repository
+  apt_repository:
+    repo: "{{ __gluu_repository[ansible_distribution_release] }}"
+    state: present
+
+- name: Install gluu-cluster-mgr package
+  apt:
+    name: "gluu-cluster-mgr"
+    update_cache: yes
+    state: installed
+  register: install_gluu_cluster_manager
+
+- name: Install global python requirements for pip
+  apt:
+    name: "{{item}}"
+    update_cache: yes
+    state: installed
+  with_items:
+    - python-pip
+    - python-mysqldb

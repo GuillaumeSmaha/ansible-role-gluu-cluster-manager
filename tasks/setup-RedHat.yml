@@ -1,0 +1,26 @@
+---
+- name: Install the libselinux-python package
+  yum: name=libselinux-python state=installed
+
+- name: Add Gluu repository
+  template:
+    src: gluu.repo.j2
+    dest: /etc/yum.repos.d/gluu.repo
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Install gluu-cluster-mgr package
+  yum:
+    name: "gluu-cluster-mgr"
+    state: installed
+    enablerepo: gluu
+  register: install_gluu_cluster_manager
+
+- name: Install global python requirements for pip
+  yum:
+    name: "{{item}}"
+    state: installed
+  with_items:
+    - python-pip
+    - MySQL-python

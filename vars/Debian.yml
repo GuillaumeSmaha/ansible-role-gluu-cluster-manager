@@ -1,0 +1,15 @@
+---
+__gluu_repository_gpg_key:
+    zesty: "https://repo.gluu.org/ubuntu/gluu-apt.key"
+    trusty: "https://repo.gluu.org/ubuntu/gluu-apt.key"
+    xenial: "https://repo.gluu.org/ubuntu/gluu-apt.key"
+    jessie: "https://repo.gluu.org/debian/gluu-apt.key"
+    wheezy: "https://repo.gluu.org/debian/gluu-apt.key"
+    squeeze: "https://repo.gluu.org/debian/gluu-apt.key"
+__gluu_repository:
+    zesty: "deb https://repo.gluu.org/ubuntu/ zesty-devel main"
+    trusty: "deb https://repo.gluu.org/ubuntu/ trusty-devel main"
+    xenial: "deb https://repo.gluu.org/ubuntu/ xenial-devel main"
+    jessie: "deb https://repo.gluu.org/debian/ stable main"
+    wheezy: "deb https://repo.gluu.org/debian/ stable main"
+    squeeze: "deb https://repo.gluu.org/debian/ stable main"

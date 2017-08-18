@@ -1,0 +1,30 @@
+
+- name: Gluu Cluster Manager - Cluster Manager - Check if database is created
+  stat:
+    path: /opt/gluu-cluster-mgr/clustermgr.db
+  register: gluu_cluster_manager_database_is_setup
+  
+- name: Gluu Cluster Manager - Cluster Manager - Create/Update Dabatase
+  shell: clustermgr-cli db upgrade
+  environment:
+    APP_MODE: "{{ gluu_cluster_app_mode }}"
+  when: install_gluu_cluster_manager.changed or gluu_cluster_manager_database_is_setup.stat.exists == False
+
+- name: Gluu Cluster Manager - Cluster Manager - Update file permission
+  file:
+    path: /opt/gluu-cluster-mgr/
+    owner: gluu
+    group: gluu
+    recurse: yes
+    state: directory
+
+- name: Gluu Cluster Manager - Cluster Manager - Check if config file is already setup
+  stat:
+    path: /opt/gluu-cluster-mgr/instance/config.py
+  register: gluu_cluster_manager_config_is_setup
+
+- name: Gluu Cluster Manager - Cluster Manager - Copy config file with secret key
+  template:
+    src: configuration/config.py
+    dest: /opt/gluu-cluster-mgr/instance/config.py
+  when: gluu_cluster_manager_config_is_setup.stat.exists == False

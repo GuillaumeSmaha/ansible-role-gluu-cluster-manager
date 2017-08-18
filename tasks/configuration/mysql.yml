@@ -1,0 +1,38 @@
+
+- name: "Gluu Cluster Manager - MySQL - Get user password"
+  set_fact:
+    gluu_cluster_mysql_user_password: "{{ gluu_cluster_mysql_user_password }}"
+
+- name: "Gluu Cluster Manager - MySQL - Create user"
+  mysql_user:
+    name: gluu
+    password: "{{ gluu_cluster_mysql_user_password }}"
+    priv: 'gluu_log.*:ALL,GRANT'
+    state: present
+
+- name: "Gluu Cluster Manager - MySQL - Check if database is already created"
+  shell: mysql -e 'SHOW DATABASES;' | grep gluu_log
+  register: dbstatus
+  ignore_errors: True
+
+- name: "Gluu Cluster Manager - MySQL - Import database"
+  mysql_db:
+    state: import
+    name: gluu_log
+    login_user: gluu
+    login_password: '{{ gluu_cluster_mysql_user_password }}'
+    target: /opt/message-consumer/conf/mysql_schema.sql
+  when: dbstatus.rc != 0
+  
+- name: "Gluu Cluster Manager - MySQL - Update Configuration: Username"
+  lineinfile:
+    path: /opt/message-consumer/conf/prod.properties
+    regexp: '^spring.mysql.datasource.username='
+    line: 'spring.mysql.datasource.username=gluu'
+  
+- name: "Gluu Cluster Manager - MySQL - Update Configuration: Password"
+  lineinfile:
+    path: /opt/message-consumer/conf/prod.properties
+    regexp: '^spring.mysql.datasource.password='
+    line: 'spring.mysql.datasource.password={{ gluu_cluster_mysql_user_password }}'
+  notify: restart message-consumer

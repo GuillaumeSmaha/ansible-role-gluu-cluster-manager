@@ -1,0 +1,6 @@
+- hosts: gluu-cluster-manager
+  become: true
+  become_user: root
+  become_method: sudo
+  roles:
+    - GuillaumeSmaha.gluu-cluster-manager

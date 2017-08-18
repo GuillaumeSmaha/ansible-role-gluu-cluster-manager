@@ -1,0 +1,8 @@
+
+- name: "Gluu Cluster Manager - ActiveMQ - Update Configuration"
+  lineinfile:
+    path: /etc/activemq/instances-available/main/activemq.xml
+    regexp: '<transportConnector '
+    line: '<transportConnector name="openwire" uri="tcp://{{ gluu_ip }}:61616"/>'
+  notify:
+    - restart activemq

@@ -1,0 +1,41 @@
+---
+# Parameters
+- name: Include variables.
+  include_vars: "all.yml"
+
+# Variable setup
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+
+# Setup/install tasks
+- include: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Install global python requirements
+  pip: name={{item}} state=present
+  with_items:
+    - Flask-WTF==0.14
+
+
+- include: configuration/sshkey.yml
+
+- include: configuration/activemq.yml
+
+- include: configuration/mysql.yml
+
+- include: configuration/cluster-manager.yml
+
+
+- name: Restart services
+  debug:
+    msg: "Restart services"
+  notify:
+    - restart gunicorn
+    - restart celery
+    - restart celerybeat
+  when: install_gluu_cluster_manager.changed or gluu_cluster_manager_config_is_setup.stat.exists == False
+
+
