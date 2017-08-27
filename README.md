@@ -105,11 +105,12 @@ $ vagrant plugin install vagrant-hostmanager
 $ vagrant up --provider=lxc
 $ ansible-galaxy install GuillaumeSmaha.gluu-cluster-manager
 $ ansible-playbook -i hosts deploy.yml
+$ ssh -L 6080:localhost:6000 -i .vagrant/machines/gluu-cluster-manager/lxc/private_key vagrant@gluu-cluster-manager
 ```
 
 Access to the Gluu Cluster Manager:
 
-https://gluu-cluster-manager:6080/
+http://localhost:6080/
 
 Sample projects
 ---------------
