@@ -1,12 +1,11 @@
-  
-  
+---
 - name: "Gluu Cluster - SSH Key - Create SSH directory"
   file:
     path: '/home/gluu/.ssh'
     state: directory
 
 - name: "Gluu Cluster Manager - SSH Key - Generate SSH Key"
-  shell: ssh-keygen -b 4096 -t rsa -f /home/gluu/.ssh/id_rsa -C 'cluster-mgr' -q -N /dev/null
+  command: ssh-keygen -b 4096 -t rsa -f /home/gluu/.ssh/id_rsa -C 'cluster-mgr' -q -N /dev/null
   args:
     creates: /home/gluu/.ssh/id_rsa
 
@@ -19,10 +18,10 @@
     state: directory
 
 - name: "Gluu Cluster Manager - SSH Key - Check public key"
-  shell: ssh-keygen -l -f /home/gluu/.ssh/id_rsa.pub
+  command: ssh-keygen -l -f /home/gluu/.ssh/id_rsa.pub
   changed_when: false
 
 - name: "Gluu Cluster Manager - SSH Key - Get public key"
-  shell: cat /home/gluu/.ssh/id_rsa.pub
+  command: cat /home/gluu/.ssh/id_rsa.pub
   register: gluu_cluster_manager_public_key
   changed_when: false

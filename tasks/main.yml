@@ -23,7 +23,6 @@
 
 - include: configuration/cluster-manager.yml
 
-
 - name: Restart services
   debug:
     msg: "Restart services"
@@ -31,6 +30,7 @@
     - restart gunicorn
     - restart celery
     - restart celerybeat
-  when: install_gluu_cluster_manager.changed or gluu_cluster_manager_config_is_setup.stat.exists == False
+  when: install_gluu_cluster_manager.changed
+          or not gluu_cluster_manager_config_is_setup.stat.exists  # noqa 503
 
 

@@ -11,9 +11,10 @@
     state: present
 
 - name: "Gluu Cluster Manager - MySQL - Check if database is already created"
-  shell: mysql -e 'SHOW DATABASES;' | grep gluu_log
+  shell: mysql -e 'SHOW DATABASES;' | grep gluu_log  # noqa 305
   register: dbstatus
   ignore_errors: True
+  changed_when: True
 
 - name: "Gluu Cluster Manager - MySQL - Import database"
   mysql_db:
@@ -23,13 +24,13 @@
     login_password: '{{ gluu_cluster_mysql_user_password }}'
     target: /opt/message-consumer/conf/mysql_schema.sql
   when: dbstatus.rc != 0
-  
+
 - name: "Gluu Cluster Manager - MySQL - Update Configuration: Username"
   lineinfile:
     path: /opt/message-consumer/conf/prod.properties
     regexp: '^spring.mysql.datasource.username='
     line: 'spring.mysql.datasource.username=gluu'
-  
+
 - name: "Gluu Cluster Manager - MySQL - Update Configuration: Password"
   lineinfile:
     path: /opt/message-consumer/conf/prod.properties

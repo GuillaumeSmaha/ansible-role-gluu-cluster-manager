@@ -19,7 +19,7 @@
 
 - name: Install global python requirements for pip
   yum:
-    name: "{{item}}"
+    name: "{{ item }}"
     state: installed
   with_items:
     - python-pip

@@ -3,12 +3,13 @@
   stat:
     path: /opt/gluu-cluster-mgr/clustermgr.db
   register: gluu_cluster_manager_database_is_setup
-  
+
 - name: Gluu Cluster Manager - Cluster Manager - Create/Update Dabatase
-  shell: clustermgr-cli db upgrade
+  shell: clustermgr-cli db upgrade  # noqa 305
   environment:
     APP_MODE: "{{ gluu_cluster_app_mode }}"
-  when: install_gluu_cluster_manager.changed or gluu_cluster_manager_database_is_setup.stat.exists == False
+  when: install_gluu_cluster_manager.changed
+          or not gluu_cluster_manager_database_is_setup.stat.exists  # noqa 503
 
 - name: Gluu Cluster Manager - Cluster Manager - Update file permission
   file:
@@ -27,4 +28,4 @@
   template:
     src: configuration/config.py
     dest: /opt/gluu-cluster-mgr/instance/config.py
-  when: gluu_cluster_manager_config_is_setup.stat.exists == False
+  when: not gluu_cluster_manager_config_is_setup.stat.exists

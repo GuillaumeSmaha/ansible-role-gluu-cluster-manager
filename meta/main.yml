@@ -13,8 +13,5 @@ galaxy_info:
     - xenial
   galaxy_tags:
     - gluu
-    - gluu:manager
-    - gluu:cluster
-    - gluu:clustermanager
     - cluster
     - manager
